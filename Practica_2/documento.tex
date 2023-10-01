@@ -1,0 +1,208 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{listings}
+
+\lstset{
+    basicstyle=\small\ttfamily,     % Tamaño de fuente pequeño y fuente monoespaciada
+    breaklines=true,                % Permite dividir líneas largas
+    columns=fullflexible,           % Permite que las líneas se ajusten al ancho del texto
+    frame=single,                   % Añade un marco alrededor del código
+    language=Python,                % Lenguaje de programación
+    numbers=left,                   % Números de línea a la izquierda
+    numberstyle=\tiny,              % Tamaño de fuente de los números de línea
+    xleftmargin=1em,                % Margen izquierdo
+}
+
+\title{Métodos de agrupamiento}
+
+\author{
+\IEEEauthorblockN{Cuamatzi Flores L. A.\textsuperscript{1}, Pluma Amaro I. A.\textsuperscript{2}, García Vásquez A.\textsuperscript{3}, Portilla Posadas F. D.\textsuperscript{4}}
+\IEEEauthorblockA{
+\textit{Ingeniería en Inteligencia Artificial} \\
+\textit{Unidad Profesional Interdisciplinaria de Ingeniería, Campus Tlaxcala, Instituto Politécnico Nacional}\\
+Tlaxacala, México\\
+lcuamatzif2100@alumno.ipn.mx, ipluma2101@alumno.ipn.mx, agarcia2102@alumno.ipn.mx, fportillap2100@alumno.ipn.mx
+}
+}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+La siguiente practica contiene el desarrollo de dos algoritmos de agrupamiento, uno de ellos es el algoritmo k-means, mientras que el segundo se trata del algoritmo DBSCAN, ambos se ocupan de encontrar grupos de datos que comparten características. Se usó el lenguaje de programación Python para la implementación del algortimo además de la visualización de los clusters encontrados por cada uno.
+\end{abstract}
+
+\section{Introducción}
+
+Los algoritmos de aprendizaje automático pueden clasificarse en dos categorías: aprendizaje supervisado y aprendizaje no supervisado. También existen otras categorías, como el aprendizaje semisupervisado y el aprendizaje por refuerzo. Pero la mayoría de los algoritmos se clasifican en aprendizaje supervisado o no supervisado. 
+
+La diferencia entre ellos se debe a la presencia de una variable objetivo; en el aprendizaje no supervisado, no hay variable objetivo. El conjunto de datos solo tiene variables de entrada que describen los datos. Esto se denomina aprendizaje no supervisado.
+
+\subsection{K-Means Clustering}
+
+El algoritmo K-Means trabaja de forma iterativa para asignar cada punto de datos a uno de los K grupos basándose en las características que se proporcionan. Los puntos de datos se agrupan en función de la similitud de las características.
+
+K-Means se utiliza ampliamente en aplicaciones como la segmentación de imágenes, segmentación de clientes, agrupación de especies, detección de anomalías y agrupación de idiomas. Permite encontrar grupos intrínsecos dentro de un conjunto de datos sin etiquetar y extraer inferencias de ellos. Se basa en la agrupación por centroides.
+
+\subsubsection{Centroide}
+
+Un centroide es un punto de datos situado en el centro de un clúster. En el clustering basado en centroides, los clústeres están representados por un centroide. El algoritmo de agrupación K-Means utiliza un procedimiento iterativo para obtener un resultado final.
+
+El algoritmo comienza con estimaciones iniciales de los K centroides. Luego, itera entre dos pasos:
+
+\paragraph{Paso de Asignación de Datos}
+
+Cada centroide define uno de los clústeres. En este paso, cada punto de datos se asigna a su centroide más cercano, basándose en la distancia euclidiana al cuadrado.
+
+\paragraph{Paso de Actualización de Centroides}
+
+En este paso, se recalculan y actualizan los centroides. Para ello, se toma la media de todos los puntos de datos asignados al clúster de ese centroide.
+
+El algoritmo itera entre los pasos 1 y 2 hasta que se cumple un criterio de parada, como la convergencia o un número máximo de iteraciones.
+
+\subsubsection{Elección del valor de K}
+
+El algoritmo K-Means depende de la determinación del número de conglomerados. Para determinar el número óptimo de conglomerados, se pueden utilizar diferentes técnicas, siendo el método del codo una de las más comunes.
+
+\paragraph{El Método del Codo}
+
+El método del codo se utiliza para determinar el número óptimo de conglomerados en la agrupación K-means. Trata de encontrar el punto en el que la función de coste deja de disminuir significativamente al aumentar el número de clústeres.
+
+\subsection{Conjunto de Pruebas (Muestra)}
+
+El conjunto de datos con el que se va a trabajar es "live", el cual consiste en el número de reacciones que recibe una foto, un link, un estado o un video en las redes sociales. El archivo se proporciona en el repositorio adjunto con este documento.
+
+\section{DBSCAN}
+
+El algoritmo DBSCAN (Density-Based Spatial Clustering of Applications with Noise) es otro enfoque popular para la clusterización. A diferencia de K-Means, DBSCAN no requiere que el usuario especifique el número de clústeres de antemano y puede identificar clústeres de diferentes formas y densidades. El proceso de DBSCAN se basa en dos parámetros clave:
+
+\begin{itemize}
+    \item $\varepsilon$ (epsilon): Radio de búsqueda alrededor de cada punto.
+    \item $MinPts$: Número mínimo de puntos dentro de $\varepsilon$ para considerar un punto como núcleo.
+\end{itemize}
+
+DBSCAN identifica tres tipos de puntos: núcleo, borde y ruido, y construye clústeres al conectarse a través de puntos núcleo.
+
+\section{Desarrollo}
+
+\textbf{Detalles del código.} \\
+A continuación, se presenta la implementación del algoritmo K-Means en Python, junto con una clase `KMeansClassifier` que encapsula las funciones principales del algoritmo. El código se utiliza para agrupar datos en clústeres utilizando K-Means.
+
+\subsection{Clase \texttt{KMeansClassifier}}
+La clase `KMeansClassifier` se utiliza para crear una instancia del clasificador K-Means y ajustar clústeres a los datos de entrada.
+
+\begin{enumerate}
+  \item \textbf{Inicialización:} \\
+  La clase se inicializa con los siguientes parámetros:
+  \begin{itemize}
+    \item \texttt{data (numpy.ndarray):} Los datos de entrada como una matriz NumPy.
+    \item \texttt{k (int):} El número de clústeres a crear.
+  \end{itemize}
+
+  \item \textbf{Método \texttt{initialize\_centroids}:} \\
+  Este método inicializa los centroides de los clústeres de manera aleatoria. Se generan centroides aleatorios dentro del rango de valores de cada característica.
+
+  \item \textbf{Método \texttt{assign\_to\_clusters}:} \\
+  Este método asigna cada punto de datos al clúster más cercano. Calcula la distancia euclidiana entre cada punto y los centroides para asignarlos a los clústeres correspondientes.
+
+  \item \textbf{Método \texttt{update\_centroids}:} \\
+  Calcula los nuevos centroides basados en los puntos asignados a cada clúster.
+
+  \item \textbf{Método \texttt{fit}:} \\
+  Implementa el algoritmo K-Means para ajustar los clústeres a los datos. Toma un parámetro opcional \texttt{max\_iterations} que especifica el número máximo de iteraciones del algoritmo.
+
+  \item \textbf{Método \texttt{predict}:} \\
+  Predice el clúster al que pertenecen nuevos datos. Toma una matriz de nuevos datos como entrada y devuelve una lista de etiquetas de clúster para los nuevos datos.
+
+  \item \textbf{Método \texttt{visualize\_clusters}:} \\
+  Visualiza los clústeres y los centroides utilizando gráficos de dispersión.
+
+  \item \textbf{Método estático \texttt{euclidean\_distance}:} \\
+  Calcula la distancia euclidiana entre dos puntos. Toma dos listas de coordenadas de puntos como entrada y devuelve la distancia euclidiana.
+
+\end{enumerate}
+
+\subsection{Clase \texttt{LiveData}}
+La clase `LiveData` se utiliza para cargar y procesar datos desde un archivo CSV. A continuación se describen sus métodos:
+
+\begin{enumerate}
+  \item \textbf{Inicialización:} 
+  La clase se inicializa con un parámetro \texttt{path}, que es la ruta al archivo CSV que contiene los datos.
+
+  \item \textbf{Método \texttt{read}:} 
+  Este método lee los datos del archivo CSV, excluyendo las columnas innecesarias y realizando la conversión de los valores de la columna "status\_type" a valores numéricos (0: photo, 1: video, 2: link, 3: status). Los datos se almacenan en la variable \texttt{data} y las clases en la variable \texttt{classes}.
+
+  \item \textbf{Método \texttt{pemutar}:} \\
+  Este método permuta los datos y las clases, lo que puede ser útil para aleatorizar el orden de los datos.
+
+  \item \textbf{Método \texttt{clean}:} \\
+  Este método elimina las filas que tienen valores faltantes o son iguales a cero en alguna de las columnas. También convierte el array de strings a enteros.
+
+  \item \textbf{Método \texttt{visualizarDatos2d}:} \\
+  Este método visualiza los datos en gráficos 2D, mostrando diversas combinaciones de columnas en el conjunto de datos.
+
+  \item \textbf{Método \texttt{visualizarDatos3d}:} \\
+  Este método visualiza los datos en gráficos 3D, mostrando las combinaciones de tres columnas en el conjunto de datos.
+
+\end{enumerate}
+
+\subsection{Clase \texttt{Dbscan\_classifier}}
+La clase `Dbscan\_classifier` implementa el algoritmo de agrupamiento DBSCAN (Density-Based Spatial Clustering of Applications with Noise). A continuación se describen sus métodos:
+
+\begin{enumerate}
+  \item \textbf{Inicialización:} \\
+  La clase se inicializa con los siguientes parámetros:
+  \begin{itemize}
+    \item \texttt{data (numpy.ndarray):} Los datos de entrada como una matriz NumPy.
+    \item \texttt{epsilon (float):} El radio de vecindad para encontrar puntos vecinos.
+    \item \texttt{min\_points (int):} El número mínimo de puntos requeridos para formar un clúster.
+  \end{itemize}
+
+  \item \textbf{Método \texttt{fit}:} \\
+  Este método implementa el algoritmo DBSCAN para ajustar los clústeres a los datos. Identifica los puntos núcleo y expande los clústeres.
+
+  \item \textbf{Método \texttt{calculate\_centroid}:} \\
+  Este método calcula el centroide de un clúster dado.
+
+  \item \textbf{Método \texttt{euclidean\_distance}:} \\
+  Este método calcula la distancia euclidiana entre dos puntos.
+
+  \item \textbf{Método \texttt{get\_neighbors}:} \\
+  Este método encuentra los vecinos de un punto dentro de un radio dado.
+
+  \item \textbf{Método \texttt{expand\_cluster}:} \\
+  Este método expande un clúster a partir de un punto núcleo, identificando puntos adicionales dentro del mismo clúster.
+
+  \item \textbf{Método \texttt{visualize\_clusters}:} \\
+  Este método visualiza los clústeres en gráficos 2D y 3D, mostrando las distribuciones de puntos en el espacio de características.
+
+\end{enumerate}
+
+
+
+\section{Resultados}
+........
+
+
+
+
+\section{Conclusiones}
+.......
+
+\begin{thebibliography}{00}
+\bibitem{b1} Smith, J. A. (2020). Procesamiento del Lenguaje Natural: Teoría y Aplicaciones (2da edición). Editorial Académica.
+\bibitem{b2} García, M. A., Pérez, L. R. (2019). Tokenización en el procesamiento de texto. Revista de Lingüística Aplicada, 45(3), 267-285.
+
+\bibitem{b3} López, P. G., Martínez, R. S. (2018). Mejoras en la tokenización de texto en español. En J. Sánchez \& L. Rodríguez (Eds.), Actas de la Conferencia Internacional de Procesamiento de Lenguaje Natural (pp. 45-54). Editorial Universitaria.
+% Agrega más referencias si es necesario
+\end{thebibliography}
+
+\end{document}
